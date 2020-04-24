@@ -10,6 +10,13 @@ Will contain explanations of some functions
 """
 
 import tkinter as tk
+### Import requirements for embedding matplotlib ###
+from matplotlib.backends.backend_tkagg import (
+    FigureCanvasTkAgg, NavigationToolbar2Tk)
+# Implement the default Matplotlib key bindings.
+from matplotlib.backend_bases import key_press_handler
+from matplotlib.figure import Figure
+import numpy as np
 
 def clicked():
     ''' This is a function that defines what happens when a button is clicked
@@ -37,6 +44,15 @@ btn = tk.Button(window, text="Click Me", bg="orange", fg="red", command=clicked)
 
 btn.grid(column=2, row=0)
 
+
+### test plot ###
+fig = Figure(figsize=(5, 4), dpi=100)
+t = np.arange(0, 3, .01)
+fig.add_subplot(111).plot(t, 2 * np.sin(2 * np.pi * t))
+
+canvas = FigureCanvasTkAgg(fig, master=window)  # A tk.DrawingArea.
+canvas.draw()
+canvas.get_tk_widget().grid(column=0, row=1)
 
 
 ''' window.mainloop() tells Python to run the Tkinter event loop. This method 
