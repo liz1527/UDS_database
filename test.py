@@ -17,15 +17,26 @@ from matplotlib.backends.backend_tkagg import (
 from matplotlib.backend_bases import key_press_handler
 from matplotlib.figure import Figure
 import numpy as np
+from PIL import Image, ImageTk # for resizing images
 
 def clicked():
     ''' This is a function that defines what happens when a button is clicked
     '''
     lbl.configure(text="Button was clicked !!"+ txt.get()) # changes text of the welcome label
     
+    ### test image ###
+    ID = txt.get()
+    IDstr = str(ID)
+    ob_image =Image.open('all_obs/'+IDstr+'_all_band_images.png')
+    ob_image = ob_image.resize((400,400), Image.ANTIALIAS)
+    ob_image = ImageTk.PhotoImage(ob_image)
+    img = tk.Label(window, image=ob_image) # Add the logo
+    img.image = ob_image 
+    img.grid(column=0, row=4, padx=1, pady=3)
+    
 window = tk.Tk() # define the main window of the GUI
 
-window.geometry('350x200') # define the shape/size of the window
+window.geometry('800x800') # define the shape/size of the window
 
 window.title("The UDS Database") # Give it a title that will appear in the bar
 
@@ -44,7 +55,6 @@ btn = tk.Button(window, text="Click Me", bg="orange", fg="red", command=clicked)
 
 btn.grid(column=2, row=0)
 
-
 ### test plot ###
 fig = Figure(figsize=(5, 4), dpi=100)
 t = np.arange(0, 3, .01)
@@ -52,8 +62,15 @@ fig.add_subplot(111).plot(t, 2 * np.sin(2 * np.pi * t))
 
 canvas = FigureCanvasTkAgg(fig, master=window)  # A tk.DrawingArea.
 canvas.draw()
-canvas.get_tk_widget().grid(column=0, row=1)
+canvas.get_tk_widget().grid(column=0, row=3)
 
+#### test image ###
+#IDstr = str(3)
+#ob_image =Image.open('all_obs/'+IDstr+'_all_band_images.png')
+#ob_image = ob_image.resize((400,400), Image.ANTIALIAS)
+#ob_image = ImageTk.PhotoImage(ob_image)
+#img = tk.Label(window, image=ob_image) # Add the logo
+#img.grid(column=0, row=4, padx=1, pady=3)
 
 ''' window.mainloop() tells Python to run the Tkinter event loop. This method 
 listens for events, such as button clicks or keypresses, and blocks any code 
